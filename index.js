@@ -6,6 +6,9 @@ const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json());
 
+// // Serve static files from the public directory (if applicable)
+// app.use(express.static(path.join(__dirname, "public")));
+
 // Example API endpoint
 app.get("/api/data", (req, res) => {
   res.json({ message: "Hello from Node.js backend!" });
