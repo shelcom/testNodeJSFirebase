@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "experimentalDecorators": true,
+      "esModuleInterop": true,
+      "emitDecoratorMetadata": true,
+      "module": "CommonJS",
+      "target": "ES6",
+      "outDir": "dist",
+      "moduleResolution": "Node",
+      "typeRoots" : ["./node_modules/@types", "./src/types"],
+      "baseUrl": "./src",
+    },
+    "include": [
+      "src/",
+      "index.ts",
+      "app.ts"
+    ]
+}

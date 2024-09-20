@@ -8,6 +8,44 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    
+    env:
+      NODE_ENV: production
+      PORT: ${{ env.PORT }}
+      DB_USER: ${{ env.DB_USER }}
+      DB_PASSWORD: ${{ env.DB_PASSWORD }}
+      DB_NAME: ${{ env.DB_NAME }}
+      DB_HOST: ${{ env.DB_HOST }}
+      DB_PORT: ${{ env.DB_PORT }}
+      DB_SSL: ${{ env.DB_SSL }}
+      PGADMIN_EMAIL: ${{ env.PGADMIN_EMAIL }}
+      PGADMIN_PASSWORD: ${{ env.PGADMIN_PASSWORD }}
+
+      JWT_ACCESS_SECRET: ${{ env.JWT_ACCESS_SECRET }}
+      JWT_REFRESH_SECRET: ${{ env.JWT_REFRESH_SECRET }}
+      JWT_FORGET_PASSWORD_SECRET: ${{ env.JWT_FORGET_PASSWORD_SECRET }}
+
+      # Minio
+      MINIO_END_POINT: ${{ env.MINIO_END_POINT }}
+      MINIO_PORT: ${{ env.MINIO_PORT }}
+      MINIO_IS_USE_SSL: ${{ env.MINIO_IS_USE_SSL }}
+      MINIO_ACCESS_KEY: ${{ env.MINIO_ACCESS_KEY }}
+      MINIO_SECRET_KEY: ${{ env.MINIO_SECRET_KEY }}
+      BUCKET_NAME: ${{ env.BUCKET_NAME }}
+      BUCKET_REGION: ${{ env.BUCKET_REGION }}
+
+      MAIL_LOGIN: ${{ env.MAIL_LOGIN }}
+      MAIL_PASSWORD: ${{ env.MAIL_PASSWORD }}
+
+      SALT_VALUE: ${{ env.SALT_VALUE }}
+      REDIS_URL: ${{ env.REDIS_URL }}
+
+      APP_ID_ONESIGNAL: ${{ env.APP_ID_ONESIGNAL }}
+      API_KEY_ONESIGNAL: ${{ env.API_KEY_ONESIGNAL }}
+
+      RP_NAME: ${{ env.RP_NAME }}
+      RP_ID: ${{ env.RP_ID }}
+      ORIGIN: ${{ env.ORIGIN }}
 
     steps:
       - name: Checkout the repository
@@ -22,10 +60,4 @@ jobs:
         run: npm install
 
       - name: Build the project (if applicable)
-        run: npm run build # Optional, if your project requires a build step (e.g., compiling TypeScript or bundling).
-
-
-    #   - name: Deploy to Firebase Hosting
-    #     run: firebase deploy --only hosting
-    #     env:
-    #       FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }} # Use the Firebase token from GitHub secrets
+        run: npm run start
