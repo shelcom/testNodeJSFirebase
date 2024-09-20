@@ -5,7 +5,7 @@ const useSSL = process.env.DB_SSL === 'true';
 export default {
   client: 'postgresql',
   connection: {
-    connectionString: `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+    connectionString: `postgres://ylzhmrlf:D-_8VpEi8v2rdmaQxrjwHCNDdXBN2Rle@ziggy.db.elephantsql.com/ylzhmrlf`,
     ssl: useSSL ? {rejectUnauthorized: false} : false,
   },
 };
