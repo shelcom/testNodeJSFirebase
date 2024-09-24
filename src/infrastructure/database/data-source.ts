@@ -8,6 +8,7 @@ export class DatabaseSource {
   private knex: Knex;
 
   constructor() {
+    const environment = 'development';
     this.knex = require('knex')(knexConfig[environment]);
   }
 
