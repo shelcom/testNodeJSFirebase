@@ -14,7 +14,7 @@
     "migrate:make": "npx knex migrate:make --knexfile src/infrastructure/database/knex.config.ts",
     "dev": "nest start --watch",
     "debug": "nest start --debug --watch",
-    "start:prod": "node main.ts",
+    "start:prod": "node dist/main.js",
     "prod": "node main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",

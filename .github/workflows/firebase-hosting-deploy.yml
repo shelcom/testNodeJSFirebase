@@ -62,5 +62,5 @@ jobs:
       - name: Build the project for production
         run: npm run build
 
-      # - name: Start the project in production mode
-      #   run: npm run start:dev
+      - name: Start the project in production mode
+        run: npm run start:prod

@@ -48,7 +48,7 @@ async function bootstrap() {
   app.use(helmet());
 
   // Add PG DB
-  const environment = 'development';
+  const environment = 'production';
   const connection = knex(knexConfig[environment]);
   Model.knex(connection);
 
