@@ -3,6 +3,7 @@ import * as path from 'path';
 import 'dotenv/config';
 
 const useSSL = process.env.DB_SSL === 'true';
+const tt = 'AVNSkIP6x0UzJKXqSS6PZJ1'
 
 const knexConfig: {[key: string]: Knex.Config} = {
   development: {
@@ -11,7 +12,7 @@ const knexConfig: {[key: string]: Knex.Config} = {
       host: process.env.DB_HOST || "pg-d109371-template-nest-js.c.aivencloud.com",
       port: parseInt(process.env.DB_PORT || "14358", 10),
       user: process.env.DB_USER || "avnadmin",
-      password: process.env.DB_PASSWORD || "",
+      password: process.env.DB_PASSWORD || tt,
       database: process.env.DB_NAME || "defaultdb",
       ssl: useSSL ? {rejectUnauthorized: false} : false,
     },
