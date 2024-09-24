@@ -1,18 +1,35 @@
 {
-    "compilerOptions": {
-      "experimentalDecorators": true,
-      "esModuleInterop": true,
-      "emitDecoratorMetadata": true,
-      "module": "CommonJS",
-      "target": "ES6",
-      "outDir": "dist",
-      "moduleResolution": "Node",
-      "typeRoots" : ["./node_modules/@types", "./src/types"],
-      "baseUrl": "./src",
-    },
-    "include": [
-      "src/",
-      "index.ts",
-      "app.ts"
-    ]
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES2018",
+    "outDir": "./dist",
+    "rootDir": ".",
+    "resolveJsonModule": true,
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": false,
+    "baseUrl": "./src",
+    "esModuleInterop": true,
+    "paths": {
+      "@api/*": ["api/*"],
+      "@common/*": ["common/*"],
+      "@domains/*": ["domains/*"],
+      "@guards/*": ["guards/*"],
+      "@infrastructure/*": ["infrastructure/*"],
+      "@scripts/*": ["scripts/*"],
+      "@tests/*": ["tests/*"]
+    }
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

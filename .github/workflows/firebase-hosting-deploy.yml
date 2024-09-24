@@ -46,6 +46,8 @@ jobs:
       RP_NAME: ${{ secrets.RP_NAME }}
       RP_ID: ${{ secrets.RP_ID }}
       ORIGIN: ${{ secrets.ORIGIN }}
+      THROTTLE_TTL: ${{ secrets.THROTTLE_TTL }}
+      THROTTLE_LIMIT: ${{ secrets.THROTTLE_LIMIT }}
 
     steps:
       - name: Checkout the repository
@@ -60,4 +62,4 @@ jobs:
         run: npm install
 
       - name: Build the project (if applicable)
-        run: npm run start
+        run: npm run start:dev
