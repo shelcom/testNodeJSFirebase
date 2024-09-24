@@ -62,5 +62,8 @@ jobs:
       - name: Build the project for production
         run: npm run build
 
+      - name: Start the project
+        run: node dist/main.js  # Ensure this matches the entry point of your built app
+
       # - name: Start the project in production mode
       #   run: npm run start:dev:dist
