@@ -42,7 +42,7 @@ export interface GetAllWithPaginationModel {
 
 export default class BaseRepository<T extends Model> {
   protected model: typeof Model;
-  protected knexInstance: Knex;
+  protected knexInstance: object;
 
   constructor(model: typeof Model) {
     this.model = model;
