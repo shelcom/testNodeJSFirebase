@@ -10,7 +10,7 @@
     "build": "npx nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start:dev": "nest start --watch --files main.ts",
-    "start:dev:dist": "node dist/main.js",
+    "start:dev:dist": "nest start",
     "migrate:up": "npx knex migrate:latest --knexfile src/infrastructure/database/knex.config.ts",
     "migrate:rollback": "npx knex migrate:rollback --knexfile src/infrastructure/database/knex.config.ts",
     "migrate:make": "npx knex migrate:make --knexfile src/infrastructure/database/knex.config.ts",
