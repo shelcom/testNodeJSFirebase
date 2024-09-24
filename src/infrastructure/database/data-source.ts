@@ -12,7 +12,7 @@ export class DatabaseSource {
     this.knex = {};
   }
 
-  getKnex(): Knex {
+  getKnex(): {} {
     return this.knex;
   }
 }
