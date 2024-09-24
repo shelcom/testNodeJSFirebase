@@ -49,8 +49,8 @@ async function bootstrap() {
 
   // Add PG DB
   const environment = 'production';
-  const connection = knex(knexConfig[environment]);
-  Model.knex(connection);
+  // const connection = knex(knexConfig[environment]);
+  // Model.knex(connection);
 
   // Swagger configuration
   generateDocument(app);
