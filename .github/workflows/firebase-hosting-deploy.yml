@@ -59,5 +59,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build the project (if applicable)
-        run: npm run start:dev
+      - name: Build the project for production
+        run: npm run build
+
+      - name: Start the project in production mode
+        run: npm run start:prod
