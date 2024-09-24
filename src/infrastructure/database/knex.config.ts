@@ -6,7 +6,7 @@ const useSSL = process.env.DB_SSL === 'true';
 
 const knexConfig: {[key: string]: Knex.Config} = {
   development: {
-    client: 'postgresql',
+    // client: 'postgresql',
     connection: {
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT, 10),
@@ -21,7 +21,7 @@ const knexConfig: {[key: string]: Knex.Config} = {
     },
   },
   test: {
-    client: 'postgresql',
+    // client: 'postgresql',
     connection: {
       host: process.env.DB_TEST_HOST || process.env.DB_HOST,
       port:
