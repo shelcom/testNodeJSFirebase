@@ -3,9 +3,9 @@ import {ValidationPipe} from '@nestjs/common';
 import {FastifyAdapter, NestFastifyApplication} from '@nestjs/platform-fastify';
 import helmet from 'helmet';
 import knex from 'knex';
-// import {Model} from 'objection';
+import {Model} from 'objection';
 
-// import knexConfig from './src/infrastructure/database/knex.config';
+import knexConfig from './src/infrastructure/database/knex.config';
 import {AppModule} from './src/app.module';
 import {APP_PORT, environment} from './src/common/constants/constants';
 import {MainErrorExceptionFilter} from './src/common/errors/mainErrorExceptionFilter';
@@ -48,9 +48,9 @@ async function bootstrap() {
   app.use(helmet());
 
   // Add PG DB
-  const environment = 'production';
-  // const connection = knex(knexConfig[environment]);
-  // Model.knex(connection);
+  const environment = 'development';
+  const connection = knex(knexConfig[environment]);
+  Model.knex(connection);
 
   // Swagger configuration
   generateDocument(app);

@@ -5,14 +5,14 @@ import {environment} from '@common/constants/constants';
 
 @Injectable()
 export class DatabaseSource {
-  private knex: object;
+  private knex: Knex;
 
   constructor() {
-    const environment = 'production';
-    this.knex = {};
+    const environment = 'development';
+    this.knex = require('knex')(knexConfig[environment]);
   }
 
-  getKnex(): {} {
+  getKnex(): Knex {
     return this.knex;
   }
 }

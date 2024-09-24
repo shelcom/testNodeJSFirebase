@@ -63,4 +63,4 @@ jobs:
         run: npm run build
 
       - name: Start the project in production mode
-        run: npm run start:prod
+        run: npm run start:dev:dist
