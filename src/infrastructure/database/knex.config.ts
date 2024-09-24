@@ -8,11 +8,11 @@ const knexConfig: {[key: string]: Knex.Config} = {
   development: {
     client: 'pg', // Ensure this client is set
     connection: {
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT, 10),
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+      host: process.env.DB_HOST || "pg-d109371-template-nest-js.c.aivencloud.com",
+      port: parseInt(process.env.DB_PORT || "14358", 10),
+      user: process.env.DB_USER || "avnadmin",
+      password: process.env.DB_PASSWORD || "",
+      database: process.env.DB_NAME || "defaultdb",
       ssl: useSSL ? {rejectUnauthorized: false} : false,
     },
     // migrations: {
