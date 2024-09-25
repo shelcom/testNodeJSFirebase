@@ -55,11 +55,24 @@ jobs:
 
       - name: Install NestJS CLI globally
         run: npm install -g @nestjs/cli
+      
       - run: npm ci
 
       - name: project_a build
         run: nest build
 
+      - name: Archive production artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist
+
+      - name: Archive node_modules
+        uses: actions/upload-artifact@v3
+        with:
+          name: node_modules
+          path: node_modules
+          
       # - name: Install dependencies
       #   run: npm install
 
