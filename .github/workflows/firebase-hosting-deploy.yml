@@ -55,15 +55,19 @@ jobs:
 
       - name: Install NestJS CLI globally
         run: npm install -g @nestjs/cli
+      - run: npm ci
 
-      - name: Install dependencies
-        run: npm install
+      - name: project_a build
+        run: nest build
 
-      - name: Build the project for production
-        run: npm run build
+      # - name: Install dependencies
+      #   run: npm install
 
-      - name: Start the project
-        run: node dist/main.js  # Ensure this matches the entry point of your built app
+      # - name: Build the project for production
+      #   run: npm run build
+
+      # - name: Start the project
+      #   run: node dist/main.js  # Ensure this matches the entry point of your built app
 
       # - name: Start the project in production mode
       #   run: npm run start:dev:dist
