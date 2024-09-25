@@ -53,6 +53,9 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v2
 
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
       - name: Install NestJS CLI globally
         run: npm install -g @nestjs/cli
       
