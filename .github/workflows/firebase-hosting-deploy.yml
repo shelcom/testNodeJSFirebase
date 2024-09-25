@@ -49,16 +49,21 @@ jobs:
       THROTTLE_TTL: ${{ secrets.THROTTLE_TTL }}
       THROTTLE_LIMIT: ${{ secrets.THROTTLE_LIMIT }}
 
+    strategy:
+      matrix:
+        node-version: [18.x, 16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path:  '**/package-lock.json'
 
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools
-
-      - name: Install NestJS CLI globally
-        run: npm install -g @nestjs/cli
-      
+      - run: npm i -g @nestjs/cli
       - run: npm ci
 
       - name: project_a build
@@ -70,8 +75,8 @@ jobs:
           name: dist
           path: dist
       
-      - name: Deploy to Firebase Hosting
-        run: firebase deploy --only hosting --token ${{ secrets.FIREBASE_DEPLOY_TOKEN }}
+      # - name: Deploy to Firebase Hosting
+      #   run: firebase deploy --only hosting --token ${{ secrets.FIREBASE_DEPLOY_TOKEN }}
 
       # - name: Archive node_modules
       #   uses: actions/upload-artifact@v3
