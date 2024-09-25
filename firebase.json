@@ -1,0 +1,13 @@
+{
+    "hosting": {
+      "public": "dist",
+      "rewrites": [
+        {
+          "source": "/api/**",
+          "run": {
+            "serviceId": "playground-105d9"
+          }
+        }
+      ]
+    }
+  }
