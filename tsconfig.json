@@ -1,35 +1,17 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
-    "target": "ES2018",
-    "outDir": "./dist",
     "rootDir": ".",
-    "resolveJsonModule": true,
+    "module": "commonjs",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
     "sourceMap": true,
-    "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": false,
-    "baseUrl": "./src",
-    "esModuleInterop": true,
-    "paths": {
-      "@api/*": ["api/*"],
-      "@common/*": ["common/*"],
-      "@domains/*": ["domains/*"],
-      "@guards/*": ["guards/*"],
-      "@infrastructure/*": ["infrastructure/*"],
-      "@scripts/*": ["scripts/*"],
-      "@tests/*": ["tests/*"]
-    }
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true
   },
-  "include": ["**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

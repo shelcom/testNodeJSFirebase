@@ -1,32 +1,13 @@
-import {ThrottlerModule} from '@nestjs/throttler';
-import {Module} from '@nestjs/common';
-import {ConfigModule, ConfigService} from '@nestjs/config';
-
-import {AuthModule} from '@api/auth/auth.module';
-import {UserModule} from '@api/user/user.module';
-import {DatabaseModule} from '@infrastructure/database/database.module';
-import {SharedModule} from 'shared.module';
+import { Module } from '@nestjs/common';
+import { CommonModule } from './common/common.module';
+import { CoreModule } from './core/core.module';
+import { UserModule } from './user/user.module';
+import { TypegooseModule } from 'nestjs-typegoose';
+import { config } from './config';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: `${process.cwd()}/.env.${process.env.NODE_ENV || 'development'}`,
-    }),
-    ThrottlerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => [
-        {
-          ttl: config.get('THROTTLE_TTL'),
-          limit: config.get('THROTTLE_LIMIT'),
-        },
-      ],
-    }),
-    DatabaseModule,
-    AuthModule,
-    UserModule,
-    SharedModule,
-  ],
+  imports: [CommonModule, CoreModule, UserModule, TypegooseModule.forRoot(config.dataAccess.uri, config.dataAccess.options)],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

@@ -63,39 +63,14 @@ jobs:
           cache: 'npm'
           cache-dependency-path:  '**/package-lock.json'
 
-      - run: npm i -g @nestjs/cli
-      - run: npm ci
+      - name: Install NestJS CLI globally
+        run: npm install -g @nestjs/cli
 
-      - name: project_a build
-        run: nest build
-
-      - name: List dist directory
-        run: ls -la dist
-
-      - name: Archive production artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          path: dist
       
-      # - name: Deploy to Firebase Hosting
-      #   run: firebase deploy --only hosting --token ${{ secrets.FIREBASE_DEPLOY_TOKEN }}
+      # Install dependencies step 
+      - name: Install dependencies
+        run: npm ci
 
-      # - name: Archive node_modules
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: node_modules
-      #     path: node_modules
-    
-
-      # - name: Install dependencies
-      #   run: npm install
-
-      # - name: Build the project for production
-      #   run: npm run build
-
-      # - name: Start the project
-      #   run: node dist/main.js  # Ensure this matches the entry point of your built app
-
-      # - name: Start the project in production mode
-      #   run: npm run start:dev:dist
+      # Build step 
+      - name: build
+        run: npm run build
