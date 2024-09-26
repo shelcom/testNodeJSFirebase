@@ -61,13 +61,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-          cache-dependency-path:  '**/package-lock.json'
+          cache-dependency-path: '**/package-lock.json'
 
-      
-      # Install dependencies step 
+      # Install dependencies step
       - name: Install dependencies
-        run: npm ci
+        run: npm ci && npm install copyfiles --save-dev
 
-      # Build step 
+      # Build step
       - name: build
         run: npm run build
