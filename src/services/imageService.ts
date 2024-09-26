@@ -2,7 +2,7 @@ import ApiError from 'errors/ApiError';
 import strings from 'strings';
 import {injectable} from 'tsyringe';
 import ImageRepository from 'repositories/imageRepository';
-import minio from 'configs/minio';
+// import minio from 'configs/minio';
 import {v4} from 'uuid';
 import multer from '@koa/multer';
 import {ImageType} from 'models/imageType';
@@ -24,7 +24,7 @@ class ImageService {
   };
 
   checkIfImagesExist = async (imageUrls: string[], type: ImageType) => {
-    const names = imageUrls.map((url) => url.getImageName());
+    const names = imageUrls.map(url => url.getImageName());
     return await this.imageRepository.valuesExistIn(
       {
         key: 'original',
@@ -35,7 +35,7 @@ class ImageService {
   };
 
   replaceImages = async (oldLinks: string[], newLinks: string[]) => {
-    const linksToRemove = oldLinks.filter((item) => !newLinks.includes(item));
+    const linksToRemove = oldLinks.filter(item => !newLinks.includes(item));
 
     for (let index = 0; index < linksToRemove.length; index++) {
       await this.delete(linksToRemove[index]);
@@ -43,8 +43,8 @@ class ImageService {
   };
 
   getUrl = async (name: string) => {
-    const url = await minio.presignedGetObject(process.env.BUCKET_NAME, name);
-    return url;
+    // const url = await minio.presignedGetObject(process.env.BUCKET_NAME, name);
+    return 'url';
   };
 
   private delete = async (link: string) => {
@@ -75,17 +75,17 @@ class ImageService {
       'Content-type': contentType,
     };
 
-    await minio.putObject(
-      process.env.BUCKET_NAME,
-      fileName,
-      fileBuffer,
-      fileSize,
-      metadata,
-    );
+    // await minio.putObject(
+    //   process.env.BUCKET_NAME,
+    //   fileName,
+    //   fileBuffer,
+    //   fileSize,
+    //   metadata,
+    // );
   };
 
   private deleteFromBucket = async (name: string) => {
-    return await minio.removeObject(process.env.BUCKET_NAME, name);
+    // return await minio.removeObject(process.env.BUCKET_NAME, name);
   };
 }
 

@@ -9,15 +9,16 @@ import {RouterContext} from '@koa/router';
 export default (imageType: ImageType) => {
   return async (ctx: RouterContext, next: Koa.Next) => {
     const imageServiceInstance = container.resolve(ImageService);
-    const imageUrls = ctx.request.body.images;
-    if (!imageUrls) {
-      return await next();
-    }
+    // const imageUrls = ctx.request.body.images;
+    // if (!imageUrls) {
+    //   return await next();
+    // }
 
-    if (await imageServiceInstance.checkIfImagesExist(imageUrls, imageType)) {
-      return await next();
-    }
+    // if (await imageServiceInstance.checkIfImagesExist(imageUrls, imageType)) {
+    //   return await next();
+    // }
 
+    return await next();
     throw ApiError.unprocessableEntity(strings.image.imageHasNotBeenUploaded);
   };
 };

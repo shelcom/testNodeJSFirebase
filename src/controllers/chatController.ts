@@ -4,6 +4,10 @@ import {singleton} from 'tsyringe';
 import BaseController from './baseController';
 import ChatService from 'services/chatService';
 
+interface CreateRequestBody {
+  name: string;
+}
+
 @singleton()
 class ChatController extends BaseController {
   constructor(private chatService: ChatService) {
@@ -11,19 +15,26 @@ class ChatController extends BaseController {
   }
 
   create = async (ctx: RouterContext, next: Koa.Next) => {
-    const {name} = ctx.request.body;
-    const userId = ctx.params.user_id;
-    const userIdInt = parseInt(userId);
-    const ownerId = ctx.user.id;
+    try {
+      const {name} = ctx.request.body as CreateRequestBody;
+      const userId = ctx.params.user_id;
+      const userIdInt = parseInt(userId);
+      const ownerId = ctx.user.id;
 
-    const data = await this.chatService.create({
-      name,
-      ownerId,
-      userId: userIdInt,
-    });
+      const data = await this.chatService.create({
+        name,
+        ownerId,
+        userId: userIdInt,
+      });
 
-    ctx.status = 201;
-    ctx.body = {data};
+      ctx.status = 201;
+      ctx.body = {data};
+    } catch (error) {
+      // Error handling
+      ctx.status = 500;
+      ctx.body = {error: 'Internal Server Error'};
+      console.error('Error occurred:', error);
+    }
   };
 
   getAll = async (ctx: RouterContext, next: Koa.Next) => {

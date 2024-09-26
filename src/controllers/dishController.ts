@@ -5,6 +5,16 @@ import DishService from 'services/dishService';
 import {singleton} from 'tsyringe';
 import ImageController from 'controllers/imageController';
 import BaseController from './baseController';
+import {DishType} from 'models/dishType';
+
+interface DishCreateModel {
+  restaurantId: number;
+  name: string;
+  description: string;
+  images: string[];
+  price: number;
+  type: DishType;
+}
 
 @singleton()
 class DishController extends BaseController {
@@ -16,7 +26,8 @@ class DishController extends BaseController {
   }
 
   create = async (ctx: RouterContext, next: Koa.Next) => {
-    const {name, description, images, price, type} = ctx.request.body;
+    const {name, description, images, price, type} = ctx.request
+      .body as DishCreateModel;
     const {restaurantId} = ctx.params;
     const restaurantIdInt = parseInt(restaurantId);
     const currentUserId = ctx.user.id;
@@ -38,7 +49,8 @@ class DishController extends BaseController {
   };
 
   update = async (ctx: RouterContext, next: Koa.Next) => {
-    const {name, description, images, price, type} = ctx.request.body;
+    const {name, description, images, price, type} = ctx.request
+      .body as DishCreateModel;
     const {id} = ctx.params;
     const idInt = parseInt(id);
     const currentUserId = ctx.user.id;

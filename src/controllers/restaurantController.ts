@@ -7,6 +7,14 @@ import RestaurantService from 'services/restaurantService';
 import {singleton} from 'tsyringe';
 import BaseController from './baseController';
 
+interface RestaurantCreateModel {
+  ownerId: number;
+  name: string;
+  description: string;
+  images: string[];
+  location: {latitude: string; longitude: string};
+}
+
 @singleton()
 class RestaurantController extends BaseController {
   constructor(
@@ -18,7 +26,8 @@ class RestaurantController extends BaseController {
   }
 
   create = async (ctx: RouterContext, next: Koa.Next) => {
-    const {name, description, images, location} = ctx.request.body;
+    const {name, description, images, location} = ctx.request
+      .body as RestaurantCreateModel;
     const ownerId = ctx.user.id;
     const data = await this.restaurantService.create({
       ownerId,
@@ -36,7 +45,8 @@ class RestaurantController extends BaseController {
     const {id} = ctx.params;
     const idInt = parseInt(id);
     const currentUserId = ctx.user.id;
-    const {name, description, images, location} = ctx.request.body;
+    const {name, description, images, location} = ctx.request
+      .body as RestaurantCreateModel;
 
     const data = await this.restaurantService.update(
       {

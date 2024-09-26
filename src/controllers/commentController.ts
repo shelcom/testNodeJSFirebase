@@ -4,6 +4,11 @@ import {singleton} from 'tsyringe';
 import BaseController from './baseController';
 import CommentService from 'services/commentService';
 
+interface CommentCreateModel {
+  comment: string;
+  rating: number;
+}
+
 @singleton()
 class CommentController extends BaseController {
   constructor(private commentService: CommentService) {
@@ -11,7 +16,7 @@ class CommentController extends BaseController {
   }
 
   create = async (ctx: RouterContext, next: Koa.Next) => {
-    const {comment, rating} = ctx.request.body;
+    const {comment, rating} = ctx.request.body as CommentCreateModel;
     const id = ctx.params.id;
     const idInt = parseInt(id);
     const userId = ctx.user.id;
@@ -29,7 +34,7 @@ class CommentController extends BaseController {
   };
 
   update = async (ctx: RouterContext, next: Koa.Next) => {
-    const {comment, rating} = ctx.request.body;
+    const {comment, rating} = ctx.request.body as CommentCreateModel;
     const id = ctx.params.id;
     const idInt = parseInt(id);
     const userId = ctx.user.id;

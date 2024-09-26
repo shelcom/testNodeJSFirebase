@@ -5,12 +5,48 @@ import {singleton} from 'tsyringe';
 import strings from 'strings';
 import {getServerHost} from 'helpers/getServerHost';
 
+interface UserModel {
+  email: string;
+  password?: string;
+  role?: string;
+}
+
+interface RegistrationPasskeysOptionsModel {
+  id: string;
+  rawId: string;
+  type: string;
+  response: {
+    attestationObject: string;
+    clientDataJSON: string;
+  };
+}
+
+interface TokenAndPassword {
+  token?: string;
+  refreshToken?: string;
+  newPassword?: string;
+  password?: string;
+}
+
+interface LoginPasskeysOptionsModel {
+  email: string;
+  id: string;
+  rawId: string;
+  type: string;
+  response: {
+    authenticatorData: string;
+    clientDataJSON: string;
+    signature: string;
+    userHandle: string;
+  };
+}
+
 @singleton()
 class UserController {
   constructor(private userService: UserService) {}
 
   registration = async (ctx: RouterContext, next: Koa.Next) => {
-    const {email, password, role} = ctx.request.body;
+    const {email, password, role} = ctx.request.body as UserModel;
     const data = await this.userService.registration(email, password, role);
 
     ctx.status = 201;
@@ -18,7 +54,7 @@ class UserController {
   };
 
   registrationPasskeysInitialize = async (ctx: RouterContext) => {
-    const {email, role} = ctx.request.body;
+    const {email, role} = ctx.request.body as UserModel;
     const data = await this.userService.registrationPasskeysInitialize(
       email,
       role,
@@ -31,7 +67,8 @@ class UserController {
   registrationPasskeysFinalize = async (ctx: RouterContext) => {
     const {id} = ctx.params;
     const idInt = parseInt(id);
-    const {...registrationOptions} = ctx.request.body;
+    const {...registrationOptions} = ctx.request
+      .body as RegistrationPasskeysOptionsModel;
 
     const data = await this.userService.registrationPasskeysFinalize(
       idInt,
@@ -41,7 +78,7 @@ class UserController {
   };
 
   loginPasskeysInitialize = async (ctx: RouterContext) => {
-    const {email} = ctx.request.body;
+    const {email} = ctx.request.body as UserModel;
     const data = await this.userService.loginPasskeysInitialize(email);
 
     ctx.body = {
@@ -50,7 +87,7 @@ class UserController {
   };
 
   loginPasskeysFinalize = async (ctx: RouterContext) => {
-    const {...loginOptions} = ctx.request.body;
+    const {...loginOptions} = ctx.request.body as LoginPasskeysOptionsModel;
     console.log(loginOptions);
 
     const data = await this.userService.loginPasskeysFinalize(loginOptions);
@@ -58,7 +95,7 @@ class UserController {
   };
 
   login = async (ctx: RouterContext, next: Koa.Next) => {
-    const {email, password} = ctx.request.body;
+    const {email, password} = ctx.request.body as UserModel;
     const data = await this.userService.login(email, password);
     ctx.body = {data};
   };
@@ -70,13 +107,13 @@ class UserController {
   };
 
   refresh = async (ctx: RouterContext, next: Koa.Next) => {
-    const {refreshToken} = ctx.request.body;
+    const {refreshToken} = ctx.request.body as TokenAndPassword;
     const data = await this.userService.refresh(refreshToken);
     ctx.body = {data};
   };
 
   forgetPassword = async (ctx: RouterContext, next: Koa.Next) => {
-    const {email} = ctx.request.body;
+    const {email} = ctx.request.body as UserModel;
     const baseLink = getServerHost(ctx);
     await this.userService.forgetPassword(baseLink, email);
     ctx.body = {
@@ -87,7 +124,7 @@ class UserController {
   };
 
   recoverPassword = async (ctx: RouterContext, next: Koa.Next) => {
-    const {token, password} = ctx.request.body;
+    const {token, password} = ctx.request.body as TokenAndPassword;
     await this.userService.recoverPassword(token, password);
     ctx.body = {};
   };

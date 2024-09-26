@@ -4,6 +4,20 @@ import {singleton} from 'tsyringe';
 import OrderService from 'services/orderService';
 import BaseController from './baseController';
 import {UserRole} from 'models/database/user';
+import {OrderStatus} from 'models/orderStatus';
+
+interface OrderModel {
+  restaurantId: number;
+  name: string;
+  comment: string;
+  dish_ids: number[];
+  address: string;
+  delivery_time?: Date;
+}
+
+interface StatusModel {
+  status: OrderStatus;
+}
 
 @singleton()
 class OrderController extends BaseController {
@@ -12,7 +26,8 @@ class OrderController extends BaseController {
   }
 
   create = async (ctx: RouterContext, next: Koa.Next) => {
-    const {name, comment, dish_ids, address, delivery_time} = ctx.request.body;
+    const {name, comment, dish_ids, address, delivery_time} = ctx.request
+      .body as OrderModel;
 
     const {id} = ctx.params;
     const idInt = parseInt(id);
@@ -88,7 +103,7 @@ class OrderController extends BaseController {
 
   changeStatus = async (ctx: RouterContext, next: Koa.Next) => {
     const id = parseInt(ctx.params.id);
-    const {status} = ctx.request.body;
+    const {status} = ctx.request.body as StatusModel;
     const data = await this.orderService.changeStatus(id, status);
     ctx.body = {data};
   };
