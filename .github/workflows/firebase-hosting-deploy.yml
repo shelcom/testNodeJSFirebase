@@ -11,28 +11,31 @@ jobs:
 
     env:
       NODE_ENV: production
+      PORT: ${{ secrets.PORT }}
+
+    strategy:
+      matrix:
+        node-version: [18.x]
 
     steps:
       # Step 1: Checkout the repository
       - uses: actions/checkout@v3
 
-      # Step 2: Set up Docker Buildx for multi-stage build
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      # Step 2: Set up Node.js
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
 
-      # # Step 3: Log in to DockerHub (if necessary, otherwise skip)
-      # - name: Log in to DockerHub
-      #   uses: docker/login-action@v2
-      #   with:
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
 
-      # Step 4: Build the Docker image with multi-stage builds
-      - name: Build Docker image
-        run: |
-          docker build --target production -t my-nestjs-app:latest .
+      # Step 4: Build the NestJS app for production
+      - name: Build the app
+        run: npm run build
 
-      # Step 5: Run the production Docker image
-      - name: Run Docker container
-        run: |
-          docker run -d -p 8080:8080 my-nestjs-app:latest
+      # Step 5: Run the app (optional for local validation)
+      - name: Run the app (optional)
+        run: npm run start:prod &
+        # The `&` allows the server to run in the background (optional if you just want to validate)
