@@ -11,8 +11,6 @@ jobs:
 
     env:
       NODE_ENV: production
-      # Add Firebase token from GitHub secrets
-      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
     steps:
       # Step 1: Checkout the repository
