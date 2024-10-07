@@ -12,37 +12,37 @@ jobs:
     env:
       NODE_ENV: production
       PORT: ${{ secrets.PORT }}
-
-    strategy:
-      matrix:
-        node-version: [18.x]
-
+      
     steps:
       # Step 1: Checkout the repository
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      # Step 2: Set up Google Cloud SDK
+      - name: Set up Google Cloud SDK
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@v0.2.1
         with:
-          node-version: ${{ matrix.node-version }}
+          service_account_key: ${{ secrets.GCLOUD_KEY }}
+          project_id: ${{ secrets.GCLOUD_PROJECT }}
 
-      # Step 3: Install NestJS CLI
-      - name: Install NestJS CLI
-        run: npm install -g @nestjs/cli
+      # Step 3: Authenticate Docker with Google Container Registry
+      - name: Configure Docker for GCR
+        run: gcloud auth configure-docker gcr.io
 
-      # Step 4: Install dependencies
-      - name: Install dependencies
-        run: npm ci
+      # Step 4: Build and tag Docker image
+      - name: Build Docker image
+        run: docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app .
 
-      - name: Build the app
-        run: npm run build
+      # Step 5: Push Docker image to Google Container Registry
+      - name: Push Docker image
+        run: docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app
 
-      # Step 6: Add Dockerfile steps to use the Node.js image and expose the port
-      - name: Use Node.js Docker image
+      # Step 6: Deploy to Cloud Run
+      - name: Deploy to Cloud Run
         run: |
-          echo -e "FROM --platform=linux/amd64 node:16-alpine\n\nEXPOSE 8080" > Dockerfile
-
-      # Step 7: Run the app (optional for local validation)
-      - name: Run the app (optional)
-        run: npm run start:prod &
+          gcloud run deploy nestjs-app \
+            --image gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app \
+            --platform managed \
+            --region us-central1 \
+            --allow-unauthenticated \
+            --port 8080
