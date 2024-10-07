@@ -1,5 +1,5 @@
 # Use the official lightweight Node.js image
-FROM node:18-alpine AS build
+FROM --platform=linux/amd64 node:16-alpine
 
 # Set the working directory
 WORKDIR /usr/src/app
