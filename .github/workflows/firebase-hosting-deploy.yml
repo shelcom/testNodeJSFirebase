@@ -9,10 +9,6 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
 
-    env:
-      NODE_ENV: production
-      PORT: ${{ secrets.PORT }}
-
     steps:
       # Step 1: Checkout the repository
       - uses: actions/checkout@v3
@@ -31,18 +27,19 @@ jobs:
 
       # Step 4: Build Docker image
       - name: Build Docker image
-        run: docker build -t us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/playground-105d9/nestjs-app .
+        run: |
+          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/playground-105d9/nestjs-app:latest .
 
-      # Step 5: Push Docker image
+      # Step 5: Push Docker image to Artifact Registry
       - name: Push Docker image
         run: |
-          docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/playground-105d9:latest
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/playground-105d9/nestjs-app:latest
 
       # Step 6: Deploy to Google Cloud Run
       - name: Deploy to Google Cloud Run
         run: |
           gcloud run deploy nestjs-app \
-            --image us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/playground-105d9/nestjs-app \
+            --image us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/playground-105d9/nestjs-app:latest \
             --platform managed \
             --region us-central1 \
             --allow-unauthenticated \
