@@ -8,43 +8,36 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-
-    env:
-      NODE_ENV: production
-      PORT: ${{ secrets.PORT }}
-
-    strategy:
-      matrix:
-        node-version: [18.x]
-
     steps:
-      # Step 1: Checkout the repository
-      - uses: actions/checkout@v3
+      # Step 1: Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      # Step 2: Set up Google Cloud SDK
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          service_account_key: ${{ secrets.GCLOUD_KEY }}
+          project_id: ${{ secrets.GCLOUD_PROJECT }}
 
-      - name: Install NestJS CLI
-        run: npm install -g @nestjs/cli
+      # Step 3: Authenticate Docker with Google Container Registry
+      - name: Configure Docker for GCR
+        run: gcloud auth configure-docker
 
-      # Step 3: Install dependencies
-      - name: Install dependencies
-        run: npm ci
+      # Step 4: Build and tag Docker image
+      - name: Build Docker image
+        run: docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app .
 
-      # Step 4: Build the NestJS app for production
-      - name: Build the app
-        run: npm run build
+      # Step 5: Push Docker image to Google Container Registry
+      - name: Push Docker image
+        run: docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app
 
-      # Step 5: Run the app (optional for local validation)
-      - name: Run the app (optional)
-        run: npm run start:prod &
-        # The `&` allows the server to run in the background (optional if you just want to validate)
-
-      - name: Deploy to Firebase Hosting
+      # Step 6: Deploy to Cloud Run
+      - name: Deploy to Cloud Run
         run: |
-          npm install -g firebase-tools
-          firebase deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
-        working-directory: ./ # Ensure this is the correct path where firebase.json exists
+          gcloud run deploy nestjs-app \
+            --image gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app \
+            --platform managed \
+            --region us-central1 \
+            --allow-unauthenticated \
+            --port 8080
