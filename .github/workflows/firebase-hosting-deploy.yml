@@ -13,39 +13,37 @@ jobs:
       NODE_ENV: production
       PORT: ${{ secrets.PORT }}
 
+    strategy:
+      matrix:
+        node-version: [18.x]
+
     steps:
       # Step 1: Checkout the repository
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      # Step 2: Set up Google Cloud SDK
-      - name: Set up Google Cloud SDK
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@v0.2.1
+      # Step 2: Set up Node.js
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
-          service_account_key: ${{ secrets.GCLOUD_KEY }}
-          project_id: ${{ secrets.GCLOUD_PROJECT }}
+          node-version: ${{ matrix.node-version }}
 
-      # Step 3: Authenticate Docker with Google Container Registry
-      - name: Configure Docker for GCR
-        run: gcloud auth configure-docker gcr.io
+      # Step 3: Install NestJS CLI
+      - name: Install NestJS CLI
+        run: npm install -g @nestjs/cli
 
-      # - name: Authenticate to Google Cloud
-      #   run: echo "${{ secrets.GCLOUD_KEY }}" | base64 --decode > $HOME/gcloud-key.json
+      # Step 4: Install dependencies
+      - name: Install dependencies
+        run: npm ci
 
-      # Step 4: Build and tag Docker image
-      - name: Build Docker image
-        run: docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app .
+      # Step 5: Build the NestJS app for production
+      - name: Build the app
+        run: npm run build
 
-      # Step 5: Push Docker image to Google Container Registry
-      - name: Push Docker image
-        run: docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app
-
-      # Step 6: Deploy to Cloud Run
-      - name: Deploy to Cloud Run
+      # Step 6: Add Dockerfile steps to use the Node.js image and expose the port
+      - name: Use Node.js Docker image
         run: |
-          gcloud run deploy nestjs-app \
-            --image gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app \
-            --platform managed \
-            --region us-central1 \
-            --allow-unauthenticated \
-            --port 8080
+          echo -e "FROM --platform=linux/amd64 node:16-alpine\n\nEXPOSE 8080" > Dockerfile
+
+      # Step 7: Run the app (optional for local validation)
+      - name: Run the app (optional)
+        run: npm run start:prod &
