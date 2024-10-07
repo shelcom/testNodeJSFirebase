@@ -22,7 +22,7 @@ jobs:
 
       # Step 3: Authenticate Docker with Google Container Registry
       - name: Configure Docker for GCR
-        run: gcloud auth configure-docker
+        run: gcloud auth configure-docker gcr.io
 
       # Step 4: Build and tag Docker image
       - name: Build Docker image
