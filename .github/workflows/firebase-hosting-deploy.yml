@@ -36,7 +36,8 @@ jobs:
       # Step 5: Push Docker image
       - name: Push Docker image
         run: |
-          docker push us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/playground-105d9/nestjs-app
+          docker tag gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app gcr.io/${{ secrets.GCLOUD_PROJECT }}/playground-105d9:latest
+          docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/<REPOSITORY_NAME>:latest
 
       # Step 6: Deploy to Google Cloud Run
       - name: Deploy to Google Cloud Run
