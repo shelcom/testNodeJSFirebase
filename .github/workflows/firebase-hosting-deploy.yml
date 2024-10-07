@@ -8,35 +8,41 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: production
+      PORT: ${{ secrets.PORT }}
+
     steps:
-      # Step 1: Check out the repository
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # Step 1: Checkout the repository
+      - uses: actions/checkout@v3
 
       # Step 2: Set up Google Cloud SDK
       - name: Set up Google Cloud SDK
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@v0.2.1
+        uses: google-github-actions/setup-gcloud@v2
         with:
-          service_account_key: ${{ secrets.GCLOUD_KEY }}
           project_id: ${{ secrets.GCLOUD_PROJECT }}
+          service_account_key: ${{ secrets.GCLOUD_KEY }}
+          export_default_credentials: true
 
-      # Step 3: Authenticate Docker with Google Container Registry
-      - name: Configure Docker for GCR
-        run: gcloud auth configure-docker gcr.io
+      # Step 3: Configure Docker to use gcloud
+      - name: Configure Docker
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev
 
-      # Step 4: Build and tag Docker image
+      # Step 4: Build Docker image
       - name: Build Docker image
-        run: docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app .
+        run: docker build -t us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/playground-105d9/nestjs-app .
 
-      # Step 5: Push Docker image to Google Container Registry
+      # Step 5: Push Docker image
       - name: Push Docker image
-        run: docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app
+        run: |
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/playground-105d9/nestjs-app
 
-      # Step 6: Deploy to Cloud Run
-      - name: Deploy to Cloud Run
+      # Step 6: Deploy to Google Cloud Run
+      - name: Deploy to Google Cloud Run
         run: |
           gcloud run deploy nestjs-app \
-            --image gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app \
+            --image us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/playground-105d9/nestjs-app \
             --platform managed \
             --region us-central1 \
             --allow-unauthenticated \
