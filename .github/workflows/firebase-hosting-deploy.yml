@@ -33,7 +33,7 @@ jobs:
       # Step 5: Push Docker image to Artifact Registry
       - name: Push Docker image
         run: |
-          docker push us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/playground-105d9/nestjs-app:latest
+          docker push us-central1-docker.pkg.dev/playground-105d9/playground-105d9/nestjs-app:latest
 
       # Step 6: Deploy to Google Cloud Run
       - name: Deploy to Google Cloud Run
