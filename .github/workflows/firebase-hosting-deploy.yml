@@ -11,38 +11,26 @@ jobs:
 
     env:
       NODE_ENV: production
-      PORT: ${{ secrets.PORT }}
-      
+      PORT: ${{ secrets.PORT }} # Ensure this secret is set in your GitHub repository settings
+
     steps:
       # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Google Cloud SDK
-      - name: Set up Google Cloud SDK
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@v0.2.1
-        with:
-          service_account_key: ${{ secrets.GCLOUD_KEY }}
-          project_id: ${{ secrets.GCLOUD_PROJECT }}
+      # Step 2: Set up Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      # Step 3: Authenticate Docker with Google Container Registry
-      - name: Configure Docker for GCR
-        run: gcloud auth configure-docker gcr.io
-
-      # Step 4: Build and tag Docker image
+      # Step 3: Build Docker image
       - name: Build Docker image
-        run: docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app .
+        run: docker buildx build --platform linux/amd64 -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app .
 
-      # Step 5: Push Docker image to Google Container Registry
+      # Step 4: Push Docker image to Google Container Registry
       - name: Push Docker image
         run: docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app
 
-      # Step 6: Deploy to Cloud Run
-      - name: Deploy to Cloud Run
+      # Step 5: Deploy to Firebase Hosting
+      - name: Deploy to Firebase Hosting
         run: |
-          gcloud run deploy nestjs-app \
-            --image gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app \
-            --platform managed \
-            --region us-central1 \
-            --allow-unauthenticated \
-            --port 8080
+          firebase deploy --project ${{ secrets.GCLOUD_PROJECT }} --token ${{ secrets.FIREBASE_TOKEN }}
