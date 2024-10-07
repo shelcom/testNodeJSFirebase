@@ -22,17 +22,9 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # Step 3: Build Docker image
-      - name: Build Docker image
-        run: docker buildx build --platform linux/amd64 -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app .
-
-      # Step 4: List Docker images (for debugging)
-      - name: List Docker images
-        run: docker images
-
-      # Step 5: Push Docker image to Google Container Registry
-      - name: Push Docker image
-        run: docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app
+     # Step 3: Build and push Docker image
+      - name: Build and Push Docker image
+        run: docker buildx build --platform linux/amd64 --push -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app .
 
       # Step 6: Deploy to Firebase Hosting
       - name: Deploy to Firebase Hosting
