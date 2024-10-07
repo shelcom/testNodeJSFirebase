@@ -29,8 +29,8 @@ jobs:
         run: docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app .
 
       # Step 5: Push Docker image to Google Container Registry
-      - name: Push Docker image
-        run: docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app
+      # - name: Push Docker image
+      #   run: docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app
 
       # Step 6: Deploy to Cloud Run
       - name: Deploy to Cloud Run
