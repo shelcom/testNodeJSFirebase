@@ -25,7 +25,7 @@ jobs:
   # Step 4: Build and push Docker image
       - name: Build and Push Docker image
         run: |
-          docker buildx build --platform linux/amd64 -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/nestjs-app --push .
+          docker buildx build --platform linux/amd64 -t gcr.io/firebaseapphosting-images/testnodejsfirebase --push .
 
       # Step 5: List Docker images (for debugging)
       - name: List Docker images
@@ -34,4 +34,4 @@ jobs:
       # Step 6: Deploy to Firebase Hosting
       - name: Deploy to Firebase Hosting
         run: |
-          firebase deploy --project ${{ secrets.GCLOUD_PROJECT }} --token ${{ secrets.FIREBASE_TOKEN }}
+          firebase deploy --project firebaseapphosting-images --token ${{ secrets.FIREBASE_TOKEN }}
